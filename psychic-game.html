@@ -8,18 +8,24 @@
 	<div id="game">
 		<h1> The Psychic Game </h1>
 		<p>Guess what letter I'm thinking of!</p>
-		<p>Wins:</p>
-		<p>Losses:</p>
-		<p>Guesses Left:</p>
-		<p>Your Guesses so far:</p>
+		<p>Wins: <span id="wins">0</span></p>
+		<p>Losses:  <span id="losses">0</span></p>
+		<p>Guesses Left: <span id="guesses-left"></span></p>
+		<p>Guessed so far: <span id="guesses-so-far"></span></p>
     </div>
     <!--begin javascript-->
 	<script type="text/javascript">
 		
 		 var computerChoices = ["a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k", "l", "m", "n", "o", "p", "q", "r", "s", "t", "u", "v", "w", "x", "y", "z",];
 
+
+    // count  wins/losses
+    var wins = 0;
+    var losses = 0;
 		 var wins = 0;
-		 var losses = 0;
+         var losses = 0;
+         var guessedLetters = [];
+         var letterToGuess = null;
 		 var numGuesses = 9;
 		 var guessChoices = [];
 		 document.onkeyup = function(event) {
