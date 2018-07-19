@@ -1,54 +1,66 @@
 var Letter = require('./letter.js')
 
 function Letter(wrd) {
-    this.word = wrd
-    this.letter = []
-    this.wordFound = false
-
-    // gets letters and pushes to letters array
+    this.letters = [];
+    this.underscoreArray = [];
+    this.letterArray = [];
+    this.strArray = [];
+    this.wordSplitter = function () {
+        for (var i = 0; i<this.word.length; i++) {
+            this.letterArray[i] = "_";
+        }
+    }
+    this.showLetters = function(){
+        var strArray = this.word.split();  
+        console.log(strArray)
+        for (var i = 0; i<this.strArray.length; i++)
+        {
+            this.letters.push( new Letter(strArray[i]) );
+        }
+    
+    }
+}
+    // gets and pushes to letters array
     this.getLetter = function () {
         for (var i = 0; i < this.word.length; i++) {
-            var newLetter = new Letter(this.word[i]);
-            this.letters.push(newLetter);
+        var newLtr = new Letter(this.word[i]);
+        this.letters.push(newLtr);
         }
     }
 
     // checks to see if user found the current word
     this.checkWord = function () {
         if (this.letters.every(function (lttr) {
-            return lttr.appear === true;
+          return lttr.appear === true;
         })) {
             this.wordFound = true;
-            return true;
+          return true;
         }
     }
-
-    // checks to see if letter is in the word
-    this.checkIfLetterFound = function (guessedLetter) {
-        var whatToReturn = 0
-
-        // iterates through each letter to see if it matches the guessed letter
+    
+    this.checkLtr = function (guessedLetter) {
+        var myReturn = 0
         this.letters.forEach(function (lttr) {
             if (lttr.letter === guessedLetter) {
-                lttr.appear = true
-                whatToReturn++
+            lttr.appear = true
+            myReturn++
             }
         })
-
-        // if guessLetter matches Letter the letter should be shown
-        return whatToReturn
+    return myReturn
     }
-
-    this.wordRender = function () {
+// // letterArray.isCorrect();
+// console.log(wordTest.letterArray)
+// wordTest.wordSplitter();
+// console.log(wordTest.letterArray)
+// wordTest.showTheLetters();
+    this.wrdRender = function () {
         var display = ''
-        
-        // render the word based on if letters are found or not
         this.letters.forEach(function (lttr) {
             var currentLetter = lttr.letterRender()
             display += currentLetter
         })
         return display
     }
-}
+
 
 module.exports = Word
