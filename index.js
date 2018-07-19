@@ -1,8 +1,7 @@
 var inquirer = require('inquirer')
-var letter = require('./letter')
-
-var Word = require('./word.js')
 var Game = require('./game.js')
+var Word = require('./word.js')
+var letter = require('./letter')
 
 var hangManDisplay = Game.newWord.hangman
 
@@ -11,13 +10,10 @@ var guessesRemaining = 10
 var guessedLetters = []
 var display = 0
 var currentWord = ("sunflower");
-
-
-var Letter = function (ltr) {
+var Ltr = function (ltr) {
     this.letter = ltr
     this.appear = false
 
-    // function renders to screen
     this.letterRender = function () {
         if (this.letter == ' ') { // renders a blank
             this.appear = true
@@ -31,26 +27,20 @@ var Letter = function (ltr) {
 }
 
 
-
-startGame()
-
-function startGame() {
-    console.log('---------------------------------------------------------')
-    console.log('')
+letsBegin()
+function letsBegin() {
     console.log('Welcome to Daynas Hangman Game!')
-    console.log('')
-    console.log('---------------------------------------------------------')
 
-    // clears guessedLetters before a new game starts if it's not already empty.
+    //guess letters if empty
     if (guessedLetters.length > 0) {
         guessedLetters = []
     }
-
+//ask user a question, play-confirm- play?//
     inquirer.prompt([
         {
             name: 'play',
-            type: 'confirm',
-            message: 'Ready to play?'
+            type: 'YES',
+            message: 'Are you Ready!?'
         }
     ]).then(function (answer) {
         if (answer.play) {
@@ -59,117 +49,107 @@ function startGame() {
             console.log('Good Luck!')
             newGame()
         } else {
-            console.log('Good then leave you little b!tch')
+            console.log('Good then leave you little bee')
         }
     })
 }
 
 function newGame() {
     if (guessesRemaining === 10) {
-        console.log('---------------------------------------------------------')
+        console.log('-')
 
-        // generates random number based on the wordBank
-        var randNum = Math.floor(Math.random() * wordBank.length)
-        currentWord = new Word(wordBank[randNum])
-        currentWord.getLetter()
-
-        // displays current word as blanks.
-        console.log('')
-        console.log(currentWord.wordRender())
-        console.log('')
+// function randomWord() {
+//     theWord = allWords[Math.floor(Math.random() * allWords.length)];
+// }
+    //random number based on the wordBank
+    var randNum = Math.floor(Math.random() * wordBank.length)
+    currentWord = new Word(wordBank[randNum])
+    currentWord.getLetter()
+    // shows blanks.
+    console.log('')
+    console.log(currentWord.render())
+    console.log('')
         promptUser()
-    } else {
-        resetGuessesRemaining()
-        newGame()
+        } else {
+            resetGuessesRemaining()
+            newGame()
     }
 }
 
 function resetGuessesRemaining() {
     guessesRemaining = 10
 }
-
+//ask user to chose letter
 function promptUser() {
     inquirer.prompt([
         {
-            name: 'chosenLetter',
-            type: 'input',
-            message: 'Choose a letter',
-            validate: function(value) {
-                if (isLetter(value)) {
-                    return true
-                } else {
-                    return false
-                }
-            }
-        }
-    ]).then(function(ltr) {
-
-        // turn letter into uppper case and store in variable
-        var letterReturned = (ltr.chosenLetter).toUpperCase()
-
-        // check to see if you guessed that letter already and set flag to false
-        var guessedAlready = false
-        for (var i = 0; i < guessedLetters.length; i++) {
-            if(letterReturned === guessedLetters[i]) {
-                guessedAlready = true
-            }
-        }
-
-        if (guessedAlready === false) {
-            // push letter into array
-            guessedLetters.push(letterReturned)
-
-            // variable to check if letter was in the word
-            var found = currentWord.checkIfLetterFound(letterReturned)
-
-            if (found === 0) {
-                console.log('Haha wrong guess!')
-
-                guessesRemaining--
-
-                // counter for hangman display
-                display++
-
-                console.log('Guesses reamaining: ' + guessesRemaining)
-                console.log(hangManDisplay[display - 1]) // prints the hangman display
-
-                console.log('---------------------------------------------------------')
-                console.log('')
-                console.log(currentWord.wordRender())
-                console.log('')
-                console.log('---------------------------------------------------------')
-                console.log('Letters guessed: ' + guessedLetters)
+        name: 'chosenLetter',
+        type: 'input',
+        message: 'Pick letter, but only a letter',
+        validate: function(value) {
+            if (isLetter(value)) {
+            return true
             } else {
-                console.log('Yes! You are correct!!')
+                return false
+            }
+        }
+    }
+    ]).then(function(ltr) {
+    //return caps
+    var ltrRtrnd = (ltr.chosenLetter).toUpperCase()
+    // if letter has already been used flag false. 
+    var guessed = false
+    for (var i = 0; i < guessedLetters.length; i++) {
+        if(ltrRtrnd === guessedLetters[i]) {
+                guessed = true
+            }
+        }
 
-                if (currentWord.checkWord() === true) {
-                    console.log('')
-                    console.log(currentWord.wordRender())
-                    console.log('')
-                    console.log('----- YOU WIN -----')
-                    startGame()
-                } else {
-                    console.log('Guesses remaining: ' + guessesRemaining)
-                    console.log('')
-                    console.log(currentWord.wordRender())
-                    console.log('')
-                    console.log('---------------------------------------------------------')
+        if (guessed === false) {
+            // push letter into array
+         guessedLetters.push(ltrRtrnd)
+            var found = currentWord.checkIfLetterFound(ltrRtrnd)
+            if (found === 0) {
+            console.log('Haha wrong guess!')
+
+            guessesRemaining--
+            // counter for hangman display
+            display++
+            console.log('Guesses reamaining: '.error + guessesRemaining)
+            console.log(hangManDisplay[display - 1]) // prints the hangman display
+            console.log('')
+            console.log(currentWord.render())
+            console.log('')
+            console.log('-------------')
+            console.log('Letters already guessed: ' + guessedLetters)
+                 } else {
+        console.log('Heck yeah! You are Correct!!')
+
+        if (currentWord.checkWord() === true) {
+            console.log('')
+            console.log(currentWord.render())
+            console.log('')
+            console.log('--- WINNER --')
+            letsBegin()
+        } else {
+            console.log('Guesses remaining: '.error + guessesRemaining)
+            console.log('')
+            console.log(currentWord.render())
+            console.log('')
+            console.log('--------------------')
                     console.log('Letters guessed: ' + guessedLetters)
                 }
             }
-
-            // if guessesRemaining and the current word isn't found prompt the user
-            if (guessesRemaining > 0 && currentWord.wordFound === false) {
-                promptUser();
-            } else if (guessesRemaining === 0) { // if you don't have any guesses left and haven't found the word you lose
-                console.log('')                
-                console.log('----- GAME OVER -----')
-                console.log('')
-                console.log('The word you were trying to guess was: ' + currentWord.word)
-                console.log('')                
+        // if guessesRemaining is not found prompt the user
+            if (guessesRemaining > 0 && theWord.wordFound === false) {
+                keepPromptingUser();
+            } else if (guessesRemaining === 0) {
+                console.log('You have been defeated!');
+                console.log('The word was: ' + theWord.word);
             }
-        } else { // prompts the user that they guessed that letter already
-            console.log('You"ve guessed that letter already, try again.')
+            
+        } else { 
+            console.log('oops! You"ve guessed that letter already, try again.')
             promptUser();
         }
     })
